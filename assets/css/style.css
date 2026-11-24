@@ -228,6 +228,19 @@ ul { margin: 0; padding: 0; list-style: none; }
   color: var(--orange);
 }
 .hero__line { display: block; }
+.hero__title--cn {
+  font-family: var(--font-round);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: 0.01em;
+  white-space: normal;
+}
+.hero__name {
+  font-size: clamp(18px, 4vw, 32px);
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  margin-bottom: clamp(2px, 0.8vw, 10px);
+}
 .hero__line--2 { padding-left: clamp(14px, 7.5vw, 132px); }
 .hero__dot { color: var(--ink); }
 .hero__cn {
@@ -479,7 +492,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
 }
 .work__list {
@@ -490,6 +503,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .project {
   position: absolute;
+  z-index: 2;
   display: block;
   text-decoration: none;
   color: var(--ink);
@@ -499,11 +513,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: inline-flex;
   flex-direction: column;
   gap: 8px;
-  padding: 12px 16px;
-  border-radius: 18px;
-  background: var(--cream);
-  /* 用与页面同色的底板 + 外扩阴影在路径上“挖”出干净的文字底，避免橙色路径穿过项目名 */
-  box-shadow: 0 0 0 14px var(--cream), 0 0 0 30px var(--cream);
+  padding: 4px 2px;
 }
 .project__icon {
   position: absolute;
@@ -592,9 +602,9 @@ ul { margin: 0; padding: 0; list-style: none; }
 .project__thumb { display: none; }
 .project__inner picture { display: none; }
 
-.project--1 { right: 4%; top: 8%; }
-.project--2 { left: 3%; top: 34%; }
-.project--3 { left: 40%; top: 66%; }
+.project--1 { right: 4%; top: 5%; }
+.project--2 { left: 3%; top: 32%; }
+.project--3 { left: 44%; top: 62%; }
 .project--1 .project__bubble { left: 30%; }
 .project--2 .project__bubble { left: 55%; }
 .project--3 .project__bubble { left: 42%; }
@@ -603,7 +613,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   position: relative;
   z-index: 3;
   margin-top: clamp(20px, 3vw, 40px);
-  text-align: center;
+  text-align: left;
 }
 
 /* ---------- mobile nav ---------- */
@@ -669,6 +679,134 @@ ul { margin: 0; padding: 0; list-style: none; }
 .mobilemenu a:hover .mobilemenu__t { color: var(--orange); }
 .mobilemenu a:hover { color: var(--orange); }
 .mobilemenu .mobilemenu__contact { color: var(--orange); }
+
+/* ---------- contact modal ---------- */
+.contact-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: clamp(14px, 3vw, 30px);
+  background: rgba(17, 17, 17, 0.46);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s ease, visibility .25s;
+}
+.contact-modal.is-open { opacity: 1; visibility: visible; }
+.contact-modal__panel {
+  position: relative;
+  width: min(580px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  background: var(--cream);
+  border-radius: clamp(18px, 2.4vw, 28px);
+  padding: clamp(22px, 3.4vw, 34px);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  transform: translateY(14px) scale(0.99);
+  transition: transform .3s var(--ease);
+}
+.contact-modal.is-open .contact-modal__panel { transform: none; }
+.contact-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1;
+  transition: background .2s ease, color .2s ease;
+}
+.contact-modal__close:hover { background: var(--ink); color: var(--cream); }
+.contact-modal h2 {
+  margin-top: 12px;
+  font-family: var(--font-round);
+  font-weight: 400;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.25;
+  color: var(--ink);
+}
+.contact-modal__hint { margin-top: 8px; font-size: 11.5px; color: var(--ink-mute); }
+.contact-modal__list { margin-top: 22px; display: grid; }
+.contact-modal__list a, .contact-modal__list div {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  gap: 14px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--ink);
+}
+.contact-modal__list span {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+.contact-modal__list strong {
+  font-family: var(--font-ming);
+  font-weight: 400;
+  font-size: clamp(18px, 2vw, 23px);
+  letter-spacing: 0.02em;
+}
+.contact-modal__list a:hover strong { color: var(--orange); text-decoration: underline; text-underline-offset: 5px; }
+.contact-modal__resume {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+.contact-modal__resume a {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--ink);
+  font-family: var(--font-round);
+  font-size: 13px;
+  line-height: 1.45;
+  background: var(--paper);
+  transition: background .2s ease, color .2s ease;
+}
+.contact-modal__resume a:hover { background: var(--ink); color: var(--cream); }
+.contact-modal__resume small {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  text-transform: uppercase;
+}
+.contact-modal__full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  background: var(--orange);
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--font-round);
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  transition: background .2s ease, transform .2s var(--ease);
+}
+.contact-modal__full:hover { background: var(--ink); transform: translateY(-1px); }
 
 /* ============================================================
    FOOTER
@@ -906,6 +1044,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ============================================================
    CONTACT / closing page
    ============================================================ */
+#contact { scroll-margin-top: clamp(70px, 8vw, 100px); }
 .contact { padding: clamp(20px, 3vw, 38px) var(--pad-x) clamp(50px, 7vw, 90px); }
 .contact__hero {
   position: relative;
@@ -1118,7 +1257,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .contact__foot {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 16px;
   margin-top: clamp(26px, 4vw, 44px);
   padding-top: 18px;
@@ -1206,6 +1345,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   .about__path { opacity: .55; }
 
   .work__list { height: auto; display: grid; gap: 0; margin-top: 28px; }
+  .work__path { display: none; }
   .project {
     position: relative;
     inset: auto;
@@ -1310,6 +1450,9 @@ ul { margin: 0; padding: 0; list-style: none; }
   .contact__list a, .contact__list div { grid-template-columns: 68px 1fr; }
   .resume-grid { grid-template-columns: minmax(0, 1fr); }
   .contact__foot { padding-left: 18px; padding-right: 18px; }
+  .contact-modal__resume { grid-template-columns: minmax(0, 1fr); }
+  .contact-modal__list a, .contact-modal__list div { grid-template-columns: 62px 1fr; }
+  .contact-modal__panel { padding: 24px 20px; }
 
   .footer { font-size: 9.5px; }
 }

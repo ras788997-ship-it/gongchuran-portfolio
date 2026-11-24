@@ -65,13 +65,19 @@
     });
   });
 
-  /* 从 #resume 直达时自动展开下载简历 */
-  if (location.hash === "#resume") {
+  /* 从 #resume 直达/点击时自动展开下载简历，并滚到结尾页 */
+  var openResumeFromHash = function () {
+    if (location.hash !== "#resume") return;
     var resumeBtn = document.querySelector('[data-toggle="resume"]');
-    if (resumeBtn) {
-      window.setTimeout(function () { resumeBtn.click(); }, 120);
-    }
-  }
+    if (!resumeBtn) return;
+    window.setTimeout(function () {
+      if (resumeBtn.getAttribute("aria-expanded") !== "true") resumeBtn.click();
+      var contactSection = document.getElementById("contact");
+      if (contactSection) contactSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 150);
+  };
+  openResumeFromHash();
+  window.addEventListener("hashchange", openResumeFromHash);
 
   /* ---------- 移动端菜单（由现有导航生成，不额外改 HTML） ---------- */
   var topbarEl = document.getElementById("topbar");
@@ -136,6 +142,69 @@
         if (window.innerWidth > 620) setMenu(false);
       });
     }
+  }
+
+  /* ---------- 联系方式弹窗（首页/详情页右上角「联系我」） ---------- */
+  var contactTriggers = Array.prototype.slice.call(document.querySelectorAll("[data-contact-open]"));
+  if (contactTriggers.length && !document.getElementById("contact-modal")) {
+    var modal = document.createElement("div");
+    modal.className = "contact-modal";
+    modal.id = "contact-modal";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-hidden", "true");
+    modal.setAttribute("aria-labelledby", "contact-modal-title");
+    modal.innerHTML = [
+      '<div class="contact-modal__panel">',
+      '<button class="contact-modal__close" type="button" aria-label="关闭联系方式">×</button>',
+      '<span class="kicker">Contact · 联系方式</span>',
+      '<h2 id="contact-modal-title">怎么联系我？</h2>',
+      '<p class="contact-modal__hint">优先邮件；电话仅用于求职沟通，请勿用于营销。</p>',
+      '<div class="contact-modal__list">',
+      '<a href="mailto:2022903716@chd.edu.cn"><span>Email</span><strong>2022903716@chd.edu.cn</strong></a>',
+      '<a href="tel:+8613577404580"><span>Phone</span><strong>135 7740 4580</strong></a>',
+      '<div><span>City</span><strong>重庆 · 成都 · 昆明</strong></div>',
+      '<div><span>Status</span><strong>2026 届本科 · 寻找 AI 应用交付 / 测试岗位</strong></div>',
+      '</div>',
+      '<div class="contact-modal__resume">',
+      '<a href="assets/docs/resume-test.pdf" download="龚楚然-简历-AI应用测试工程师.pdf"><small>PDF · 测试方向</small>AI 应用测试工程师 ↓</a>',
+      '<a href="assets/docs/resume-delivery.pdf" download="龚楚然-简历-AI应用交付工程师.pdf"><small>PDF · 交付方向</small>AI 应用交付工程师 ↓</a>',
+      '</div>',
+      '<a class="contact-modal__full" href="index.html#contact">查看完整结尾页 <span aria-hidden="true">→</span></a>',
+      '</div>'
+    ].join("");
+    document.body.appendChild(modal);
+
+    var closeBtn = modal.querySelector(".contact-modal__close");
+    var lastFocus = null;
+
+    var openModal = function () {
+      lastFocus = document.activeElement;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      window.setTimeout(function () { closeBtn.focus(); }, 40);
+    };
+    var closeModal = function () {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+    };
+
+    contactTriggers.forEach(function (btn) {
+      btn.addEventListener("click", openModal);
+    });
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
+    });
+    modal.addEventListener("click", function (e) {
+      if (e.target.closest("a")) window.setTimeout(closeModal, 120);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+    });
   }
 
   /* ---------- 页脚年份（固定 2026，留作维护） ---------- */

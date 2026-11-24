@@ -10,8 +10,9 @@
 | `work-1.html` | 制造业质量部 AI 助手 |
 | `work-2.html` | 六西格玛 AI 助手微信小程序 |
 | `work-3.html` | AI 美甲虚拟试戴网站 |
-| `contact.html` | 结尾页：联系方式 / 下载简历 |
+| `index.html#contact` | 结尾页段落：联系方式 / 下载简历（并入首页，向下滚动可见） |
 | `404.html` | 404 |
+| `contact.html` | 旧链接兼容页，自动跳到 `index.html#contact` |
 
 ## 技术说明
 
