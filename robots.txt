@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ras788997-ship-it.github.io/gongchuran-portfolio/sitemap.xml
