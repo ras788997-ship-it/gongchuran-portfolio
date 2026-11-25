@@ -19,7 +19,7 @@
 - 纯 HTML + CSS + 原生 JS，无 npm 依赖、无构建产物。
 - 字体：`assets/fonts/jingnan.woff2`（荆南圆体，正文 / 项目名）与 `quancang.woff2`（犬仓旧明朝，品牌 / 摘要 / 按钮），均已子集化，仅包含本站用到的字符。
 - 图片：项目截图全部来自真实运行记录，`assets/img/` 内同时提供 `.webp` 与 `.jpg`，通过 `<picture>` 优先加载 WebP。
-- 简历：`assets/docs/resume-test.pdf` 与 `resume-delivery.pdf`，由结尾页下载。
+- 简历：`assets/docs/resume-delivery.pdf`、`resume-fde.pdf`、`resume-test.pdf`，由首页结尾段和「联系我」弹窗下载。
 - 无统计脚本、无第三方字体、无外部图片请求；`robots.txt` / `sitemap.xml` 已按 GitHub Pages 地址配置。
 
 ## 本地预览
